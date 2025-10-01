@@ -7,8 +7,10 @@ import android.widget.RatingBar
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.gestures.snapping.SnapPosition
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -41,6 +43,7 @@ import androidx.compose.ui.draw.clipToBounds
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.DefaultShadowColor
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
@@ -56,12 +59,16 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             RecipieBookAppTheme {
-                Box(modifier = Modifier.fillMaxSize()){
+                Box(modifier = Modifier
+                    .fillMaxSize()
+                    .padding(top = 50.dp)
+                ){
                     Row {
-                        RecipiCard()
+                        Box(modifier = Modifier.border(width = 2.dp, color = Color.Black)) {
+                            RecipeCard()
+                        }
                     }
                 }
-
             }
         }
     }
@@ -70,7 +77,7 @@ class MainActivity : ComponentActivity() {
 
 @Preview(showBackground = true)
 @Composable
-fun RecipiCard() {
+fun RecipeCard() {
     Box(
         modifier = Modifier
             .height(200.dp)
@@ -82,12 +89,15 @@ fun RecipiCard() {
                     .fillMaxHeight()
                     .width(width = 100.dp)
                     .background(color = Color.Red),
+                contentScale = ContentScale.Crop,
                 painter = painterResource( id = R.drawable.food),
                 contentDescription = ""
             )
                 Row(
                     modifier = Modifier.fillMaxWidth()) {
-                    Column {
+                    Column(
+                        modifier = Modifier.padding(top = 10.dp, bottom = 10.dp)
+                    ) {
                         Row(
                             modifier = Modifier
                                 .fillMaxWidth()
@@ -101,6 +111,22 @@ fun RecipiCard() {
                             RatingBar()
                         }
                         TagRow()
+
+                        Box (modifier = Modifier.padding(10.dp)){
+                            Column {
+                                Text(
+                                    text = "Description: ",
+                                    modifier = Modifier.padding(vertical = 2.dp),
+                                    fontWeight = FontWeight.Bold,
+                                    fontSize = 15.sp
+
+                                )
+                                Text(
+                                    text = "No description yet",
+                                    fontSize = 12.sp
+                                    )
+                            }
+                        }
                     }
                 }
 
@@ -120,15 +146,15 @@ fun TagRow() {
                 .fillMaxWidth()
                 .padding(0.dp)
             ) {
-            Button(onClick = {/*TODO*/ },
-                ) {
-                Text("Tag 1")
+            Button(onClick = {/*TODO*/ }
+            ) {
+                Text(text ="Tag 1")
             }
-            Button(onClick = {/*TODO*/ },
+            Button(onClick = {/*TODO*/ }
                 ) {
                 Text("Tag 2")
             }
-            Button(onClick = {/*TODO*/ },
+            Button(onClick = {/*TODO*/ }
                 ) {
                 Text("Tag 3")
             }
@@ -152,12 +178,12 @@ fun RatingBar(
                         contentDescription = "Star Icon shadow",
                         tint = Color(0, 0, 0, 40),
                         modifier = Modifier
-                            .offset(1.dp,1.dp)
+                            .offset(1.dp, 1.dp)
                             .blur(
                                 radiusX = 3.dp,
                                 radiusY = 3.dp,
                                 edgeTreatment = BlurredEdgeTreatment.Rectangle
-                        )
+                            )
                     )
                     Icon( // Actual Icon
                         imageVector = Icons.Filled.Star,
