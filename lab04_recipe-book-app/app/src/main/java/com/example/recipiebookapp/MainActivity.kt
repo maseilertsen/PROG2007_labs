@@ -75,7 +75,6 @@ class MainActivity : ComponentActivity() {
 }
 
 
-@Preview(showBackground = true)
 @Composable
 fun RecipeCard() {
     Box(
@@ -136,7 +135,6 @@ fun RecipeCard() {
         }
     }
 
-@Preview
 @Composable
 fun TagRow() {
     Box(modifier = Modifier.width(400.dp)) {
@@ -162,7 +160,6 @@ fun TagRow() {
     }
 }
 
-@Preview
 @Composable
 fun RatingBar(
 ){
