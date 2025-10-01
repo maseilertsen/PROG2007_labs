@@ -1,16 +1,53 @@
 package com.example.recipiebookapp
 
+import android.graphics.drawable.shapes.Shape
+import android.media.Rating
 import android.os.Bundle
+import android.widget.RatingBar
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
+import androidx.compose.foundation.gestures.snapping.SnapPosition
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.widthIn
+import androidx.compose.foundation.selection.selectable
+import androidx.compose.foundation.selection.selectableGroup
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Star
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.BlurredEdgeTreatment
+import androidx.compose.ui.draw.blur
+import androidx.compose.ui.draw.clipToBounds
+import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.DefaultShadowColor
+import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+import androidx.core.content.pm.ShortcutInfoCompatSaver
 import com.example.recipiebookapp.ui.theme.RecipieBookAppTheme
 
 class MainActivity : ComponentActivity() {
@@ -19,29 +56,116 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             RecipieBookAppTheme {
-                Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    Greeting(
-                        name = "Android",
-                        modifier = Modifier.padding(innerPadding)
-                    )
+                Box(modifier = Modifier.fillMaxSize()){
+                    Row {
+                        RecipiCard()
+                    }
                 }
+
             }
         }
     }
 }
 
-@Composable
-fun Greeting(name: String, modifier: Modifier = Modifier) {
-    Text(
-        text = "Hello $name!",
-        modifier = modifier
-    )
-}
 
 @Preview(showBackground = true)
 @Composable
-fun GreetingPreview() {
-    RecipieBookAppTheme {
-        Greeting("Android")
+fun RecipiCard() {
+    Box(
+        modifier = Modifier
+            .height(200.dp)
+            .fillMaxWidth()
+    ){
+        Row {
+            Image(
+                modifier = Modifier
+                    .fillMaxHeight()
+                    .width(width = 100.dp)
+                    .background(color = Color.Red),
+                painter = painterResource( id = R.drawable.food),
+                contentDescription = ""
+            )
+                Row(
+                    modifier = Modifier.fillMaxWidth()) {
+                    Column {
+                        Row(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(horizontal = 10.dp),
+                            horizontalArrangement = Arrangement.SpaceBetween) {
+                            Text(
+                                "Recipe name",
+                                fontWeight = FontWeight.Bold,
+                                fontSize = 20.sp
+                            )
+                            RatingBar()
+                        }
+                        TagRow()
+                    }
+                }
+
+
+            }
+
+        }
+    }
+
+@Preview
+@Composable
+fun TagRow() {
+    Box(modifier = Modifier.width(400.dp)) {
+        Row(
+            horizontalArrangement = Arrangement.SpaceAround,
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(0.dp)
+            ) {
+            Button(onClick = {/*TODO*/ },
+                ) {
+                Text("Tag 1")
+            }
+            Button(onClick = {/*TODO*/ },
+                ) {
+                Text("Tag 2")
+            }
+            Button(onClick = {/*TODO*/ },
+                ) {
+                Text("Tag 3")
+            }
+        }
+    }
+}
+
+@Preview
+@Composable
+fun RatingBar(
+){
+    Box(modifier = Modifier.width(200.dp)) {
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.SpaceEvenly
+        ) {
+            for (i in 1..5) {
+                Box {
+                    Icon( // Shadow behind Icons
+                        imageVector = Icons.Filled.Star,
+                        contentDescription = "Star Icon shadow",
+                        tint = Color(0, 0, 0, 40),
+                        modifier = Modifier
+                            .offset(1.dp,1.dp)
+                            .blur(
+                                radiusX = 3.dp,
+                                radiusY = 3.dp,
+                                edgeTreatment = BlurredEdgeTreatment.Rectangle
+                        )
+                    )
+                    Icon( // Actual Icon
+                        imageVector = Icons.Filled.Star,
+                        contentDescription = "Star Icon shadow",
+                        tint = Color.Yellow
+                    )
+                }
+            }
+        }
     }
 }
