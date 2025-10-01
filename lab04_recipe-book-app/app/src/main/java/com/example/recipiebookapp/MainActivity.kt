@@ -192,14 +192,14 @@ fun TagRow(recipeTags: List<Tags>) {
 fun RatingBar(
     recipeRating: Int
 ){
-    Box(modifier = Modifier.width(200.dp)) {
+    Box(modifier = Modifier.width(200.dp),) {
         Row(
             modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.Center
+            horizontalArrangement = Arrangement.Center,
         ) {
             for (i in 0..recipeRating-1) {
                 Box (
-                    modifier = Modifier.padding(vertical = 12.dp)
+                    modifier = Modifier.padding(bottom = 12.dp)
                 ){
                     Icon( // Shadow behind Icons
                         imageVector = Icons.Filled.Star,
