@@ -3,6 +3,7 @@ package com.example.recipiebookapp
 import android.graphics.drawable.shapes.Shape
 import android.media.Rating
 import android.os.Bundle
+import android.util.Log
 import android.widget.RatingBar
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -59,13 +60,28 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             RecipieBookAppTheme {
-                Box(modifier = Modifier
-                    .fillMaxSize()
-                    .padding(top = 50.dp)
-                ){
-                    Row {
-                        Box(modifier = Modifier.border(width = 2.dp, color = Color.Black)) {
-                            RecipeCard()
+                Box(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(top = 80.dp)
+                ) {
+                    Column()
+                    {
+                        // loop over all elements in list.
+                        MockRecipes.forEach {
+                            Log.v("PRINT", "for $it") // Debug print for Logcat
+                            Box(
+                                modifier = Modifier
+                                    .padding(bottom = 20.dp)
+                                    .border(width = 2.dp, color = Color.Black)
+                            ) {
+                                RecipeCard(
+                                    recipeName = it.name,
+                                    recipeDescription = it.description,
+                                    recipeRating = it.rating,
+                                    recipeTags = it.tag
+                                )
+                            }
                         }
                     }
                 }
@@ -75,8 +91,14 @@ class MainActivity : ComponentActivity() {
 }
 
 
+
 @Composable
-fun RecipeCard() {
+fun RecipeCard(
+    recipeName: String,
+    recipeDescription: String?,
+    recipeRating: Int,
+    recipeTags: List<Tags>
+) {
     Box(
         modifier = Modifier
             .height(200.dp)
@@ -103,13 +125,13 @@ fun RecipeCard() {
                                 .padding(horizontal = 10.dp),
                             horizontalArrangement = Arrangement.SpaceBetween) {
                             Text(
-                                "Recipe name",
+                                text = recipeName,
                                 fontWeight = FontWeight.Bold,
                                 fontSize = 20.sp
                             )
-                            RatingBar()
+                            RatingBar(recipeRating)
                         }
-                        TagRow()
+                        TagRow(recipeTags)
 
                         Box (modifier = Modifier.padding(10.dp)){
                             Column {
@@ -120,10 +142,17 @@ fun RecipeCard() {
                                     fontSize = 15.sp
 
                                 )
-                                Text(
-                                    text = "No description yet",
-                                    fontSize = 12.sp
+                                if (recipeDescription != null) {
+                                    Text(
+                                        text = recipeDescription,
+                                        fontSize = 12.sp
                                     )
+                                } else{
+                                    Text(
+                                        text = "No description yet",
+                                        fontSize = 12.sp
+                                    )
+                                }
                             }
                         }
                     }
@@ -136,7 +165,7 @@ fun RecipeCard() {
     }
 
 @Composable
-fun TagRow() {
+fun TagRow(recipeTags: List<Tags>) {
     Box(modifier = Modifier.width(400.dp)) {
         Row(
             horizontalArrangement = Arrangement.SpaceAround,
@@ -146,30 +175,32 @@ fun TagRow() {
             ) {
             Button(onClick = {/*TODO*/ }
             ) {
-                Text(text ="Tag 1")
+                Text(text ="Tags:")
             }
-            Button(onClick = {/*TODO*/ }
+            recipeTags.forEach {
+                Button(onClick = {/*TODO*/ }
                 ) {
-                Text("Tag 2")
+                    Text(text= it.toString())
+                }
             }
-            Button(onClick = {/*TODO*/ }
-                ) {
-                Text("Tag 3")
             }
         }
     }
-}
+
 
 @Composable
 fun RatingBar(
+    recipeRating: Int
 ){
     Box(modifier = Modifier.width(200.dp)) {
         Row(
             modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.SpaceEvenly
+            horizontalArrangement = Arrangement.Center
         ) {
-            for (i in 1..5) {
-                Box {
+            for (i in 0..recipeRating-1) {
+                Box (
+                    modifier = Modifier.padding(vertical = 12.dp)
+                ){
                     Icon( // Shadow behind Icons
                         imageVector = Icons.Filled.Star,
                         contentDescription = "Star Icon shadow",
