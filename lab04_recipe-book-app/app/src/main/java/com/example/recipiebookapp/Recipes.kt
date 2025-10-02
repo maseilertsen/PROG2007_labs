@@ -22,7 +22,7 @@ enum class Tags {
 var MockRecipes = mutableStateListOf(
     Recipes(
         name = "Pizza",
-        description = "A flavour of italy! Meat and salad combined with flower can be an enticing combintaion",
+        description = "A flavour of italy! Meat and salad combined with flower can be an enticing combintaion - now this will be a really long text so that we can see that the text isnt spilling out over the rest of the app because some texts can be really really long, even longer than you'd expect.",
         rating = 5,
         tag = listOf(Tags.EASY, Tags.MEAT)
     ),
