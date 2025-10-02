@@ -1,5 +1,8 @@
 package com.example.recipiebookapp
 
+import androidx.compose.runtime.mutableStateListOf
+import androidx.compose.runtime.mutableStateOf
+
 // Class to display values
 data class Recipes(
     val name: String,
@@ -14,8 +17,9 @@ enum class Tags {
 }
 
 
-// Mock data to test with
-var MockRecipes = mutableListOf(
+
+// Mock data of recipes
+var MockRecipes = mutableStateListOf(
     Recipes(
         name = "Pizza",
         description = "A flavour of italy! Meat and salad combined with flower can be an enticing combintaion",

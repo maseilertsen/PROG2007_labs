@@ -33,6 +33,7 @@ import androidx.compose.material.icons.filled.Star
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
+import androidx.compose.material3.Label
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -48,13 +49,16 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.content.pm.ShortcutInfoCompatSaver
 import com.example.recipiebookapp.ui.theme.RecipieBookAppTheme
-
 class MainActivity : ComponentActivity() {
+
+    private val viewModel = RecipeViewModel()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
@@ -67,6 +71,32 @@ class MainActivity : ComponentActivity() {
                 ) {
                     Column()
                     {
+                        Box {
+                            Text(
+                                text = "Recipe Book",
+                                modifier = Modifier.fillMaxWidth(),
+                                textAlign = TextAlign.Center,
+                                fontSize = 40.sp,
+                                fontWeight = FontWeight.Black,
+                            )
+                        }
+                        Row (
+                            modifier = Modifier
+                                .fillMaxWidth()
+                            .padding(vertical = 10.dp, horizontal = 20.dp),
+                            horizontalArrangement = Arrangement.SpaceEvenly
+                        ) {
+                            Button(
+                                onClick = { viewModel.sortByName() },
+                            ) {
+                                Text(text = "Filter by name")
+                            }
+                                Button(
+                                    onClick = { viewModel.sortByRating() },
+                                ) {
+                                    Text(text = "Filter by rating")
+                                }
+                        }
                         // loop over all elements in list.
                         MockRecipes.forEach {
                             Log.v("PRINT", "for $it") // Debug print for Logcat
@@ -90,15 +120,14 @@ class MainActivity : ComponentActivity() {
     }
 }
 
-
-
 @Composable
 fun RecipeCard(
     recipeName: String,
     recipeDescription: String?,
     recipeRating: Int,
-    recipeTags: List<Tags>
+    recipeTags: List<Tags>,
 ) {
+
     Box(
         modifier = Modifier
             .height(200.dp)
@@ -163,6 +192,7 @@ fun RecipeCard(
 
         }
     }
+
 
 @Composable
 fun TagRow(recipeTags: List<Tags>) {
