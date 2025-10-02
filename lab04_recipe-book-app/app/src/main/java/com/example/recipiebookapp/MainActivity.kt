@@ -24,19 +24,32 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.selection.selectable
 import androidx.compose.foundation.selection.selectableGroup
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Star
+import androidx.compose.material3.BottomSheetDefaults
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Label
+import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.BlurredEdgeTreatment
@@ -55,15 +68,41 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.content.pm.ShortcutInfoCompatSaver
 import com.example.recipiebookapp.ui.theme.RecipieBookAppTheme
+import kotlinx.coroutines.launch
+
 class MainActivity : ComponentActivity() {
+    private val viewModel = RecipeViewModel() // Quick setup for ViewModel
 
-    private val viewModel = RecipeViewModel()
-
+    @OptIn(ExperimentalMaterial3Api::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
             RecipieBookAppTheme {
+                val sheetState = rememberModalBottomSheetState()
+                val scope = rememberCoroutineScope()
+                var showBottomSheet by remember { mutableStateOf(false) }
+
+                if (showBottomSheet) {
+                    ModalBottomSheet(
+                        onDismissRequest = {
+                            showBottomSheet = false
+                        },
+                        sheetState = sheetState
+                    ) {
+                        // Sheet content
+                        Button(onClick = {
+                            scope.launch { sheetState.hide() }.invokeOnCompletion {
+                                if (!sheetState.isVisible) {
+                                    showBottomSheet = false
+                                }
+                            }
+                        }) {
+                            Text("Hide bottom sheet")
+                        }
+                    }
+                }
+
                 Box(
                     modifier = Modifier
                         .fillMaxSize()
@@ -97,9 +136,9 @@ class MainActivity : ComponentActivity() {
                                     Text(text = "Filter by rating")
                                 }
                         }
-                        // loop over all elements in list.
+                        // Loop over all elements in list.
                         MockRecipes.forEach {
-                            Log.v("PRINT", "for $it") // Debug print for Logcat
+                            Log.v("PRINT", "for $it") // Debug print for Logcat TODO remove
                             Box(
                                 modifier = Modifier
                                     .padding(bottom = 20.dp)
@@ -113,6 +152,21 @@ class MainActivity : ComponentActivity() {
                                 )
                             }
                         }
+                    }
+                    FloatingActionButton(
+                        onClick = {
+                            showBottomSheet = true
+                        },
+                        shape = CircleShape,
+                        modifier = Modifier.align(Alignment.BottomEnd)
+                            .padding(20.dp)
+                            .padding(bottom = 20.dp)
+                            .size(70.dp)
+                    ) {
+                        Icon(
+                            imageVector = Icons.Default.Add,
+                            contentDescription = "Floating Action Button"
+                        )
                     }
                 }
             }
