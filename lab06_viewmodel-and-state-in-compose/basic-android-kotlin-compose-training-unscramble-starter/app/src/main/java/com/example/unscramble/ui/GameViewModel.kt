@@ -1,5 +1,8 @@
 package com.example.unscramble.ui
 
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import kotlinx.coroutines.flow.MutableStateFlow // StateFlow is a data holder observable flow that emits the current and new state updates.
 import com.example.unscramble.data.allWords
@@ -9,13 +12,14 @@ import kotlinx.coroutines.flow.asStateFlow
 
 class GameViewModel : ViewModel() {
 
-
     // Game UI state
     private val _uiState = MutableStateFlow(GameUiState())
     val uiState: StateFlow<GameUiState> =
         _uiState.asStateFlow() // Makes this mutable state flow a read-only state flow.
     private lateinit var currentWord: String
     private var usedWords: MutableSet<String> = mutableSetOf() // Set of words used in the game
+    var userGuess by mutableStateOf("")
+        private set
 
     init {
         resetGame()
@@ -44,5 +48,8 @@ class GameViewModel : ViewModel() {
     fun resetGame() {
         usedWords.clear()
         _uiState.value = GameUiState(currentScrambledWord = pickRandomWordAndShuffle())
+    }
+    fun updateUserGuess(guessedWord: String){
+        userGuess = guessedWord
     }
 }
