@@ -74,6 +74,7 @@ dependencies {
     implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.8.7")
     // ViewModel
     implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.6.1")
+    implementation("androidx.room:room-ktx:2.8.1")
 
 
     debugImplementation("androidx.compose.ui:ui-test-manifest")

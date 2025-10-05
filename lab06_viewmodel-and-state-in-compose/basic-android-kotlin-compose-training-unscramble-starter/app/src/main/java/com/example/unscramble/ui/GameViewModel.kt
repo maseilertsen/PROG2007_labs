@@ -4,10 +4,12 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
+import androidx.room.util.copy
 import kotlinx.coroutines.flow.MutableStateFlow // StateFlow is a data holder observable flow that emits the current and new state updates.
 import com.example.unscramble.data.allWords
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.update
 
 
 class GameViewModel : ViewModel() {
@@ -51,5 +53,17 @@ class GameViewModel : ViewModel() {
     }
     fun updateUserGuess(guessedWord: String){
         userGuess = guessedWord
+    }
+
+    fun checkUserGuess() {
+
+        if (userGuess.equals(currentWord, ignoreCase = true)) {
+        } else {
+            _uiState.update{ currentState ->
+                currentState.copy(isGuessedWordWrong = true)
+            }
+        }
+        // Reset user guess
+        updateUserGuess("")
     }
 }
