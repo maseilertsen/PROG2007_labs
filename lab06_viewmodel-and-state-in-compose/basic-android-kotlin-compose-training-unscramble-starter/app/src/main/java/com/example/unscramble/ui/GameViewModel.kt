@@ -6,6 +6,7 @@ import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.room.util.copy
+import com.example.unscramble.data.MAX_NO_OF_WORDS
 import com.example.unscramble.data.SCORE_INCREASE
 import kotlinx.coroutines.flow.MutableStateFlow // StateFlow is a data holder observable flow that emits the current and new state updates.
 import com.example.unscramble.data.allWords
@@ -71,15 +72,28 @@ class GameViewModel : ViewModel() {
     }
 
     private fun updateGameState(updatedScore: Int) {
-        _uiState.update { currentState ->
-            currentState.copy(
-                isGuessedWordWrong = false,
-                currentScrambledWord = pickRandomWordAndShuffle(),
-                score = updatedScore,
-                currentWordCount = currentState.currentWordCount.inc(),
-            )
+        if (usedWords.size == MAX_NO_OF_WORDS) {
+            // Last round in the game
+            _uiState.update { currentState ->
+                currentState.copy(
+                    isGuessedWordWrong = false,
+                    score = updatedScore,
+                    isGameOver = true,
+                )
+            }
+        } else {
+            // Normal round in the game
+            _uiState.update { currentState ->
+                currentState.copy(
+                    isGuessedWordWrong = false,
+                    currentScrambledWord = pickRandomWordAndShuffle(),
+                    currentWordCount = currentState.currentWordCount.inc(),
+                    score = updatedScore,
+                )
+            }
         }
     }
+
     fun skipWord() {
         updateGameState(_uiState.value.score)
         // Reset user guess
