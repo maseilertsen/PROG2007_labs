@@ -5,11 +5,9 @@ This lab gives you the possibility to practice Jetpack Compose and become more f
 There are many tasks and requirements described below. You do not need to complete all of them—pick the ones that seem useful for you. Focus first on the UI structure and styling.
 
 ## Task description
-You will create a screen for a recipe book (see Figure 1).
-
 The app should display a headline and a scrollable list of recipes.
-Each recipe item should contain:
 
+Each recipe item should contain:
 - An image.
 - A recipe name.
 - A short description.
